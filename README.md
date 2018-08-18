@@ -1,0 +1,1 @@
+# Hookster - a library hook generator
