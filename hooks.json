@@ -1,0 +1,50 @@
+[
+    {
+        "library": "libc.so.6",
+        "hooks": [
+            {
+                "function": "strcat",
+                "returns": "char *",
+                "args": [
+                    {
+                        "char *": "dest"
+                    },
+                    {
+                        "const char *": "src"
+                    }
+                ],
+                "header": "string.h",
+                "printformat": "strcat({%s}, {%s})\\n",
+                "printfargs": "dest, src"
+            },
+            {
+                "function": "strlen",
+                "args": [
+                    {
+                        "const char *": "str"
+                    }
+                ],
+                "returns": "size_t",
+                "header": "string.h",
+                "printformat": "strlen({%s}) = %d\\n",
+                "printfargs": "str, (int)ret"
+            }
+        ]
+    },
+    {
+        "library": "libfoo.so",
+        "hooks": [
+            {
+                "function": "foostuff",
+                "returns": "void *",
+                "args": [
+                    {
+                        "int": "bar"
+                    }
+                ],
+                "printformat": "foostuff({%d})\\n",
+                "printfargs": "bar"
+            }
+        ]
+    }
+]
