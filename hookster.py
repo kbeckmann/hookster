@@ -8,16 +8,12 @@ import shutil
 
 
 class Hookster:
-    def __init__(self):
-        self.flopp = []
-
     def process(self, library):
         library_name = library["library"]
         library_name_escaped = library["library_name_escaped"]
 
         headers = [
             "dlfcn.h",   # dlopen etc.
-            "unistd.h",  # write etc.
             "stdio.h",   # printf
             "stdlib.h"   # exit
         ]
@@ -48,7 +44,7 @@ class Hookster:
         outbuf += "\n"
 
         for hook in library["hooks"]:
-            outbuf += "int __{}_print = 1;\n".format(hook["function"],)
+            outbuf += "int __{}_print = 1;\n".format(hook["function"])
 
         library_init = ""
         for hook in library["hooks"]:
@@ -79,8 +75,12 @@ static void ___check_init(void) {
 
         for hook in library["hooks"]:
             args = hook["args"]
+            # Massage the args object. Example:
+            # args = [{"char": "foo"}, {"int": "bar"}] =>
+            #   args_prototype = "char foo, int bar"
+            #   args_call = "foo, bar"
             args_prototype = ", ".join(
-                [["%s %s" % (b, a[b]) for b in a.keys()][0] for a in args])
+                [["%s %s" % (arg_type, arg[arg_type]) for arg_type in arg.keys()][0] for arg in args])
             args_call = ", ".join(
                 [[a[b] for b in a.keys()][0] for a in args])
             outbuf += '''
@@ -116,7 +116,8 @@ static void ___check_init(void) {
             self.hooks = json.load(fp)
 
         if os.path.exists(outdir):
-            print("Directory '{}' exists, press enter to continue.".format(outdir))
+            print(
+                "Directory '{}' exists, press enter to remove it and continue.".format(outdir))
             input()
             shutil.rmtree(outdir)
 
