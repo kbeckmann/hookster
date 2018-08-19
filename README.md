@@ -29,12 +29,12 @@ A JSON file specifies which functions to hook. Here is an example where `char * 
 ]
 ```
 
-See [hooks.json](./blob/master/hooks.json) a more complete example.
+See [hooks.json](./hooks.json) a more complete example.
 
 The tool is invoked by running:
 ```
 # 1. Run the tool in order to generate c-files and a Makefile in out/
-python3 hookster.py hooks.json --outdir out
+python3 hookster.py --hooks hooks.json --outdir out
 
 # 2. Build the libraries
 cd out
